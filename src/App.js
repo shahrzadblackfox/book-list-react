@@ -3,6 +3,15 @@ import { useState, useEffect } from 'react';
 import {Icon} from 'react-icons-kit'
 import {trash} from 'react-icons-kit/feather/trash'
 
+const getDatafFromls = () =>{
+  const data = localStorage.getItem('books');
+  if(data){
+    return JSON.parse(data)
+  }else{
+    return [];
+  }
+}
+
 function App() {
 
   const [books, setBooks] = useState([]);
@@ -89,6 +98,9 @@ function App() {
             </table>
           </div>
           <button className='btn btn-danger btn-md'>حذف همه</button>
+          {
+            books.length <1 && <div> کتاب در کتابخانه نیست.</div>
+          }
         </div>
       </div>
     </div>
