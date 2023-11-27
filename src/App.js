@@ -1,9 +1,9 @@
 
 import { useState, useEffect } from 'react';
-import {Icon} from 'react-icons-kit'
-import {trash} from 'react-icons-kit/feather/trash'
 
-const getDatafFromls = () =>{
+import View from "./View"
+
+const getDataFromls = () =>{
   const data = localStorage.getItem('books');
   if(data){
     return JSON.parse(data)
@@ -14,7 +14,7 @@ const getDatafFromls = () =>{
 
 function App() {
 
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState(getDataFromls());
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [number, setNumber] = useState("");
@@ -27,6 +27,13 @@ function App() {
       number
     }
     setBooks([...books,book])
+  }
+  const deleteBooks =(number)=>{
+    const filterBooks = books.filter((elements, index)=>{
+      return elements.number !== number;
+    })
+    setBooks(filterBooks)
+
   }
 
   useEffect(()=>{
@@ -74,7 +81,10 @@ function App() {
           </form>
         </div>
         <div className="view-container">
-          <div className="table-responsive w-100">
+          {
+            books.length > 0 &&
+          <>
+            <div className="table-responsive w-100">
             <table className="table">
                <thead>
                   <tr>
@@ -85,21 +95,19 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>01</td>
-                    <td>تست</td>
-                    <td>فرزاد</td>
-                    <td className='delete-btn'>
-                      <Icon icon={trash} />
-                    </td>
-                  </tr>
+                  <View books={books} deleteBooks ={deleteBooks}/>
+
                   
                 </tbody>
             </table>
           </div>
-          <button className='btn btn-danger btn-md'>حذف همه</button>
+          <button className='btn btn-danger btn-md'onClick={()=>setBooks([])}>حذف همه</button>
+          </>
+          }
+
+          
           {
-            books.length <1 && <div> کتاب در کتابخانه نیست.</div>
+            books.length < 1 && <div> کتاب در کتابخانه نیست.</div>
           }
         </div>
       </div>
